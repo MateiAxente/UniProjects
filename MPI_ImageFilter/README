@@ -1,0 +1,50 @@
+Facultatea de Automatica si Calculatoare		     		 Axente Matei Sorin
+Sectia C.T.I.							   		   				   Grupa 325 CC
+
+			    		Algoritmi Paraleli si Distribuiti
+				     				Tema 3
+
+structura Filter:	retine un filtru prin matricea de ponderi, numitor si
+					offset
+
+	Se definesc cele 4 filtre pentru fiecare proces, apoi se incepe algoritmul
+de tip unda. Toate procesele in afara de radacina (rank 0) asteapta un mesaj de
+tip SONDAJ (0). Procesul de la care va veni primul sondaj va deveni procesul
+parinte al procesului respectiv.
+
+	Fiecare proces trimite apoi cate un mesaj SONDAJ la fiecare proces din
+lista lui de adiacenta, mai putin parintelui.
+	Daca un proces primeste un al doilea mesaj SONDAJ, vecinul de la care a
+venit acest mesaj, este marcat si eliminat din lista de adiacenta (eliminarea
+ciclurilor), dar mai intai va raspunde cu un mesaj REJECT (2), astfel si
+procesul care a trimis al doilea sondaj va elimina muchia.
+	Fiecare proces isi citeste lista de adiacenta dupa primirea primului SONDAJ
+in afara de procesul radacina.
+
+	Procesul radacina (rank 0) parcurge fisierul cu imaginile de procesat.
+	Radacina trimite fiecarui proces copil indexul filtrului care va fi folosit
+precum si dimensiunile fasiei care va fi transmisa, apoi liniile din imagine pe
+care procesul destinatar va trebui sa le imparta/prelucreze.
+	Celelalte procese asteapta primirea acestor date, apoi, daca au copii,
+impart fasia primita si o trimit in acelasi format (filtru, dimensiuni, linii).
+	Daca un proces nu are copii, va prelucra fasia primita, apoi o va trimite
+parintelui.
+	Nodurile intermediare, asteapta primirea fasiilor prelucrate de procesele
+de pe nivelele inferioare, le concateneaza in ordinea corespunzatore, apoi le
+trimit in sus catre procesul radacina.
+
+	Procesul se repeta pentru fiecare imagine, matricile image si copy sunt
+realocate dinamic la fiecare pas.
+
+	Dupa parcurgerea tuturor imaginilor, procesul radacina trimite mesajul
+STOP (-1). Celelalte mesaje propaga acest mesaj. Procesele frunza trimit in
+sus numarul de linii pe care l-au procesat. Celelalte noduri asteapta
+primirea statisticii, si o trimit in sus. La final, procesul radacina scrie
+statistica in fisierul corespunzator.
+
+	Aplicarea filtrului se face prin parcurgerea pixelilor vecini pixelului
+curent, impreuna cu matricea de ponderi a filtrului toUse. Dupa ce se face
+suma produselor dintre valorile pixelilor si ponderi, se imparte la ratia
+corespunzatoare filtrului. Daca valoarea rezultata este negativa, se va
+aproxima la 0, daca insa, valoarea este peste cea maxima (255) se va rontunji
+la 255.
