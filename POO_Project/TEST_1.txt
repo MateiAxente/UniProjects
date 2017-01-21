@@ -1,0 +1,141 @@
+newuser Ion pass Ion Popescu
+
+login Gigi pass
+>User not found
+
+login Ion ceva
+>Incorrect Password
+
+login Ion pass
+
+userinfo
+>UserName: Ion FirstName: Ion LastName: Popescu Created: 2016-01-07T23:25:13.404 LastLogin: 2016-01-07T23:25:29.636
+
+mkdir forAll
+
+touch mine -rw-
+
+ls
+>forAll
+>mine
+
+ls -a
+>D: forAll [2016-01-07T23:26:47.603] 0 -rw- 
+>F: mine 0 text [2016-01-07T23:27:01.397] -rw-
+
+cd b
+>(Logger-ul va prelua exceptia)
+
+cd mine
+>mine is not a directory(Logger-ul va prelua exceptia)
+
+cd forAll
+
+touch new -- 10 myFile binary 100 -r-
+
+cd
+
+ls -a forAll
+>F: new 10 text [2016-01-07T23:32:06.562] --
+>F: myFile 100 binary [2016-01-07T23:32:06.562] -r-
+
+ls -r
+>forAll
+>|---new
+>|---myFile
+>mine
+
+mkdir b -r-
+
+cd b
+
+cd ../forAll
+
+ls
+>new
+>myFile
+
+mkdir c d
+
+cd d
+
+touch fisier
+
+cd ..
+
+rm c
+
+rm d
+>Directory is not empty
+
+ls
+>new
+>myFile
+>d
+
+rm myFile
+>Permission denied for myFile
+
+rm -r d
+>new
+>myFile
+
+mkdir c
+
+cd c
+
+mkdir d
+
+touch f
+
+cd ..
+
+ls
+>new
+>myFile
+>c/
+>|---d/
+>|---f
+
+cd
+
+ls -ar forAll
+>F: new 10 text [2016-01-07T23:32:06.562] --
+>F: myFile 100 binary [2016-01-07T23:32:06.562] -r-
+>D: c [2016-01-07T23:38:02.546] 0 -rw- 
+>|---D: d [2016-01-07T23:38:07.590] 0 -rw- 
+>|---F: f 0 text [2016-01-07T23:38:09.574] -rw-
+
+cd a/c
+>(exceptie-Logger)
+
+upload forAll
+
+cd forAll/c
+
+rm f
+
+cd
+
+ls -r forAll
+>new
+>myFile
+>c/
+>|---d/
+
+sync c
+>Repository not found
+
+sync forAll
+
+ls -ar forAll
+>F: new 10 text [2016-01-07T23:32:06.562] --
+>F: myFile 100 binary [2016-01-07T23:32:06.562] -r-
+>D: c [2016-01-07T23:38:02.546] 0 -rw- 
+>|---D: d [2016-01-07T23:38:07.590] 0 -rw- 
+>|---F: f 0 text [2016-01-07T23:38:09.574] -rw-
+
+cd forAll/c/d
+
+pwd
+>forAll/c/d
